@@ -1,10 +1,32 @@
 import Foundation
 import Glibc
 
+// Use enums to enforce uniqueness of option labels.
+enum LongLabel: String {
+case FileType           = "filetype"
+case PresetName         = "preset"
+case DeleteExistingFile = "replace"
+case LogEverything      = "verbose"
+case TrimStartTime      = "trim-start-time"
+case TrimEndTime        = "trim-end-time"
+case FilterMetadata     = "filter-metadata"
+case InjectMetadata     = "inject-metadata"
+}
+
+enum ShortLabel: String {
+case FileType           = "f"
+case PresetName         = "p"
+case DeleteExistingFile = "r"
+case LogEverything      = "v"
+}
 
 var arguments = CommandLine.arguments;
 print("Arguments: \(arguments.count) \(arguments.remove(at: 0)) ");
 
+if arguments.count < 4 {
+   print("MailCountLog ciffers min max text \n")
+   exit(1)
+}
 var len = 9;
 if let optlen = Int(arguments[0]) {
    len = optlen;
@@ -129,11 +151,13 @@ while let line = readLine(strippingNewline: true) {
   let end = line.index(line.startIndex, offsetBy: len)
   let time = String(line[..<end])
 
+/*
   let end_full   = line.index(line.startIndex, offsetBy: 12)
   let time_full  = String(line[..<end_full])
   if let timeInterval = dateConv(time_full, len: 12) {
-     // print ("epoch: \(timeInterval) ") 
+     print ("epoch: \(timeInterval) ") 
   }
+*/
 
   for argument in arguments {
     if line.range(of: argument, options: .regularExpression) != nil {
