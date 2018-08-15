@@ -207,9 +207,7 @@ while let line = readLine(strippingNewline: true) {
 */
 
   for regex in regexArray {
-    if regex.matchesInString(line, options: [], range: Range(location: 0, length: line.count)) {
-      count += 1
-    }
+      count += regex.numberOfMatches(in: line, options: [], range: NSRange(location: 0, length: line.count))
   }
   if old_time != "" {
     let current_time = dateConv(time, len: len)!
