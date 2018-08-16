@@ -6,17 +6,39 @@
 //
 
 import Foundation
+import Utility
+
+public enum TimePeriod: String {
+    case Day
+    case Hour
+    case TenMin
+    case TenMinute
+    case Minute
+}
+
+extension TimePeriod: StringEnumArgument {
+    public static var completion: ShellCompletion {
+        return .values([(TimePeriod.Day.rawValue,  ""),
+                        (TimePeriod.Hour.rawValue, ""),
+                        (TimePeriod.TenMin.rawValue,""),
+                        (TimePeriod.TenMinute.rawValue,""),
+                        (TimePeriod.Minute.rawValue,  ""),
+                        ])
+    }
+}
 
 class DateConversion {
 
+    var timeToLength = [ TimePeriod.Day: 6, TimePeriod.Hour: 9, TimePeriod.TenMin : 11, TimePeriod.TenMinute : 11, TimePeriod.Minute: 12]
+    
     private let interval_str = [6: "", 9 : ":00", 10: ":0", 11 : "0", 12 : ""]
     var interval_dict = [ 6: 24*3600.0, 9 : 3600.0, 11 : 600.0, 12 : 60.0]
     private var df : DateFormatter;
     public var len : Int
     
-    init(df: DateFormatter, len: Int) {
+    init(df: DateFormatter, time: TimePeriod) {
         self.df = df
-        self.len = len
+        self.len = timeToLength[ time]!
         let format = df.dateFormat!
         df.dateFormat = String(format[..<format.index(format.startIndex, offsetBy: len)])
         print(df.dateFormat)
