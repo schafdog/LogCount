@@ -64,6 +64,14 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "--stat percent"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--time Hour"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--file /Users/dennis/Projects/MailLogCount/test.log "
             isEnabled = "YES">
          </CommandLineArgument>
