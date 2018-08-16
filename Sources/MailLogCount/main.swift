@@ -18,8 +18,6 @@ func getDateFormatter() -> DateFormatter {
 
 var defaultTimePeriod : TimePeriod = TimePeriod.Minute
 var fileHandle = FileHandle.standardInput
-var dateConv = DateConversion(df: getDateFormatter(), time: defaultTimePeriod)
-var sr = StreamReader(fileHandle: fileHandle)
 var old_time : DateGroup?
 var lineStat = LineStat();
 var parser = ArgumentParser(commandName: commandName,
@@ -122,6 +120,9 @@ for pat in patternArray {
     let regex = try! NSRegularExpression(pattern: pat, options: []);
     regexArray.append(regex)
 }
+
+var dateConv = DateConversion(df: getDateFormatter(), time: defaultTimePeriod)
+var sr = StreamReader(fileHandle: fileHandle)
 while let line = sr.nextLine() {
     lineStat.incTotal()
     let time = DateGroup(substr: line, dateConversion: dateConv)
