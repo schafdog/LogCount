@@ -29,8 +29,7 @@ extension TimePeriod: StringEnumArgument {
                         ])
     }
 }
-
-var defaultTimePeriod : TimePeriod = TimePeriod.Hour
+var defaultTimePeriod : TimePeriod = TimePeriod.Minute
 var parser = ArgumentParser(commandName: commandName,
                             usage: "\(commandName) [--min number] [--max number] --time [day|hour|10-minute,minute] regex",
     overview: "Simple event statistic over certain period with posibility to send mail alert when out of range",
