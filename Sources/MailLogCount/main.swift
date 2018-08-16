@@ -9,48 +9,53 @@ import Utility
 var arguments = CommandLine.arguments;
 let commandName = arguments.remove(at: 0);
 
-enum TimePeriod: String {
-    case Day
-    case Hour
-    case TenMin
-    case TenMinute
-    case Minute
+
+func getDateFormatter() -> DateFormatter {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "MMM dd HH:mm:ss"
+    return dateFormatter;
 }
 
-var timeToLength = [ TimePeriod.Day: 6, TimePeriod.Hour: 9, TimePeriod.TenMin : 11, TimePeriod.TenMinute : 11, TimePeriod.Minute: 12]
-
-extension TimePeriod: StringEnumArgument {
-    static var completion: ShellCompletion {
-        return .values([(TimePeriod.Day.rawValue,  ""),
-                        (TimePeriod.Hour.rawValue, ""),
-                        (TimePeriod.TenMin.rawValue,""),
-                        (TimePeriod.TenMinute.rawValue,""),
-                        (TimePeriod.Minute.rawValue,  ""),
-                        ])
-    }
-}
 var defaultTimePeriod : TimePeriod = TimePeriod.Minute
+var fileHandle = FileHandle.standardInput
+var dateConv = DateConversion(df: getDateFormatter(), time: defaultTimePeriod)
+var sr = StreamReader(fileHandle: fileHandle)
+var old_time : DateGroup?
+var lineStat = LineStat();
 var parser = ArgumentParser(commandName: commandName,
                             usage: "\(commandName) [--min number] [--max number] --time [day|hour|10-minute,minute] regex",
     overview: "Simple event statistic over certain period with posibility to send mail alert when out of range",
     seeAlso: "Not sure")
-var min : OptionArgument<Int> = parser.add(option: "--min",   shortName: "-l", kind: Int.self, usage: "minimal number of matches")
-var max : OptionArgument<Int> = parser.add(option: "--max",   shortName: "-h", kind: Int.self, usage: "maximal number of matches")
-var email : OptionArgument<String> = parser.add(option: "--email", shortName: "-e", kind: String.self, usage: "Email address")
-var fileArg : OptionArgument<String> = parser.add(option: "--file", shortName: "-f", kind: String.self, usage: "Use file instead of stdin")
-var timePeriod = parser.add(option: "--time", shortName: "-t", kind: TimePeriod.self, usage: "time periode")
+var min : OptionArgument<Int> = parser.add(option: "--min",
+                                           shortName: "-l",
+                                           kind: Int.self,
+                                           usage: "minimal number of matches")
+var max : OptionArgument<Int> = parser.add(option: "--max",
+                                           shortName: "-h",
+                                           kind: Int.self,
+                                           usage: "maximal number of matches")
+var email : OptionArgument<String> = parser.add(option: "--email",
+                                                shortName: "-e",
+                                                kind: String.self,
+                                                usage: "Email address")
+var fileArg : OptionArgument<String> = parser.add(option: "--file",
+                                                  shortName: "-f",
+                                                  kind: String.self,
+                                                  usage: "Use file instead of stdin")
+var timePeriod = parser.add(option: "--time", shortName: "-t",
+                            kind: TimePeriod.self, usage: "time periode")
+var statArg = parser.add(option: "--stat", shortName: "-s", kind: String.self, usage: "Alternative Stat")
 var regexArg = parser.add(positional: "regex", kind: [String].self, usage: "A list of regex")
 var upper = Int.max-1
 var lower : Int = 0
 var patternArray : Array<String> = []
-var fileHandle = FileHandle.standardInput
 
 do {
     let args = try parser.parse(arguments)
     if let paramTimePeriod = args.get(timePeriod) {
         defaultTimePeriod = paramTimePeriod
     }
-
+    
     if let paramMin = args.get(min) {
         lower = paramMin
     }
@@ -78,6 +83,9 @@ do {
             print("Failed to open \(filename). Error: \(error.localizedDescription) Exiting")
             exit(1)
         }
+        if let _ = args.get(statArg) {
+            lineStat = ProcentLineStat();
+        }
     }
 } catch ArgumentParserError.expectedArguments(_, let args) {
     print("Missing arguments \(args)")
@@ -88,29 +96,14 @@ func executeCommand(command: String, args: [String]) -> String {
     let task = Process();
     task.launchPath = command
     task.arguments = args
-
+    
     let pipe = Pipe()
     task.standardOutput = pipe
     task.launch()
-
+    
     let data = pipe.fileHandleForReading.readDataToEndOfFile()
     let output: String = String(data: data, encoding: String.Encoding.utf8)!
     return output
-}
-
-var counter = 0
-var total_count = 0;
-var count = 0
-var match_time = ""
-guard let len = timeToLength[defaultTimePeriod] else {
-    print("Failed to get length")
-    exit(1)
-}
-
-func getDateFormatter() -> DateFormatter {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "MMM dd HH:mm:ss"
-    return dateFormatter;
 }
 
 var ok_range = lower...upper
@@ -129,31 +122,26 @@ for pat in patternArray {
     let regex = try! NSRegularExpression(pattern: pat, options: []);
     regexArray.append(regex)
 }
-var dateConv = DateConversion(df: getDateFormatter(), len: len)
-var sr = StreamReader(fileHandle: fileHandle)
-var old_time : DateGroup?
 while let line = sr.nextLine() {
-    total_count += 1
+    lineStat.incTotal()
     let time = DateGroup(substr: line, dateConversion: dateConv)
-
-
+    
     for regex in regexArray {
-        count += regex.numberOfMatches(in: line, options: [],  range: NSRange(location: 0, length: line.count))
+        lineStat.addMatches(regex.numberOfMatches(in: line, options: [],  range: NSRange(location: 0, length: line.count)))
     }
-
+    
     if old_time != nil {
         while time > old_time! {
-            if !ok_range.contains(count) {
-                sendAlarm(count, old_time!.getDateAsString());
+            if !ok_range.contains(lineStat.getMatched()) {
+                sendAlarm(lineStat.getMatched(), old_time!.getDateAsString());
             }
-            print("\(count)\t\(old_time!.getDateAsString()) \(total_count) ");
-            count = 0
-            total_count = 0;
+            lineStat.printStat(old_time!.getDateAsString());
+            lineStat.reset()
             old_time = old_time?.nextGroup()
         }
     }
     old_time = time;
 }
-if (total_count > 0) {
-    print("\(count)\t\(old_time!.getDateAsString()) \(total_count) ");
+if (lineStat.getTotal() > 0) {
+    lineStat.printStat(old_time!.getDateAsString());
 }
