@@ -154,3 +154,6 @@ while let line = sr.nextLine() {
     }
     old_time = time;
 }
+if (total_count > 0) {
+    print("\(count)\t\(old_time!.getDateAsString()) \(total_count) ");
+}
