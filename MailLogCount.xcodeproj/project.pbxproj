@@ -21,9 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		957FB134212579D900CA8369 /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957FB132212579AC00CA8369 /* StreamReader.swift */; };
-		957FB13621257C1900CA8369 /* DateConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957FB13521257C1900CA8369 /* DateConversion.swift */; };
-		957FB13A21258C7200CA8369 /* DateConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957FB13521257C1900CA8369 /* DateConversion.swift */; };
+		95AF97A2212605B100AA6F0E /* DateConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957FB13521257C1900CA8369 /* DateConversion.swift */; };
+		95AF97A6212606EA00AA6F0E /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957FB132212579AC00CA8369 /* StreamReader.swift */; };
+		95AF97A7212606F200AA6F0E /* LineStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958D8CAA2125E50B0036DBC2 /* LineStat.swift */; };
 		OBJ_123 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* Await.swift */; };
 		OBJ_124 /* ByteString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_71 /* ByteString.swift */; };
 		OBJ_125 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_72 /* CStringArray.swift */; };
@@ -72,7 +72,6 @@
 		OBJ_181 /* clibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::clibc::Product" /* clibc.framework */; };
 		OBJ_193 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_204 /* MailLogCountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* MailLogCountTests.swift */; };
-		OBJ_206 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::Utility::Product" /* Utility.framework */; };
 		OBJ_207 /* Basic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::Basic::Product" /* Basic.framework */; };
 		OBJ_208 /* POSIX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::POSIX::Product" /* POSIX.framework */; };
 		OBJ_209 /* SPMLibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::SPMLibc::Product" /* SPMLibc.framework */; };
@@ -112,7 +111,6 @@
 		OBJ_271 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* Version.swift */; };
 		OBJ_272 /* Versioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* Versioning.swift */; };
 		OBJ_273 /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* misc.swift */; };
-		OBJ_275 /* Basic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::Basic::Product" /* Basic.framework */; };
 		OBJ_276 /* POSIX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::POSIX::Product" /* POSIX.framework */; };
 		OBJ_277 /* SPMLibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::SPMLibc::Product" /* SPMLibc.framework */; };
 		OBJ_278 /* clibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::clibc::Product" /* clibc.framework */; };
@@ -278,7 +276,8 @@
 
 /* Begin PBXFileReference section */
 		957FB132212579AC00CA8369 /* StreamReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
-		957FB13521257C1900CA8369 /* DateConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConversion.swift; sourceTree = "<group>"; };
+		957FB13521257C1900CA8369 /* DateConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateConversion.swift; sourceTree = "<group>"; usesTabs = 0; };
+		958D8CAA2125E50B0036DBC2 /* LineStat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineStat.swift; sourceTree = "<group>"; };
 		"MailLogCount::MailLogCount::Product" /* MailLogCount */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = MailLogCount; sourceTree = BUILT_PRODUCTS_DIR; };
 		"MailLogCount::MailLogCountTests::Product" /* MailLogCountTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = MailLogCountTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_100 /* StringConversions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConversions.swift; sourceTree = "<group>"; };
@@ -390,7 +389,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_206 /* Utility.framework in Frameworks */,
 				OBJ_207 /* Basic.framework in Frameworks */,
 				OBJ_208 /* POSIX.framework in Frameworks */,
 				OBJ_209 /* SPMLibc.framework in Frameworks */,
@@ -419,7 +417,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_275 /* Basic.framework in Frameworks */,
 				OBJ_276 /* POSIX.framework in Frameworks */,
 				OBJ_277 /* SPMLibc.framework in Frameworks */,
 				OBJ_278 /* clibc.framework in Frameworks */,
@@ -785,6 +782,7 @@
 				957FB132212579AC00CA8369 /* StreamReader.swift */,
 				OBJ_9 /* main.swift */,
 				957FB13521257C1900CA8369 /* DateConversion.swift */,
+				958D8CAA2125E50B0036DBC2 /* LineStat.swift */,
 			);
 			name = MailLogCount;
 			path = Sources/MailLogCount;
@@ -1048,7 +1046,6 @@
 				OBJ_155 /* TemporaryFile.swift in Sources */,
 				OBJ_156 /* TerminalController.swift in Sources */,
 				OBJ_157 /* Thread.swift in Sources */,
-				957FB13621257C1900CA8369 /* DateConversion.swift in Sources */,
 				OBJ_158 /* Tuple.swift in Sources */,
 				OBJ_159 /* misc.swift in Sources */,
 			);
@@ -1058,9 +1055,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				957FB134212579D900CA8369 /* StreamReader.swift in Sources */,
+				95AF97A6212606EA00AA6F0E /* StreamReader.swift in Sources */,
+				95AF97A7212606F200AA6F0E /* LineStat.swift in Sources */,
 				OBJ_175 /* main.swift in Sources */,
-				957FB13A21258C7200CA8369 /* DateConversion.swift in Sources */,
+				95AF97A2212605B100AA6F0E /* DateConversion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1687,6 +1685,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1711,6 +1710,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				GCC_OPTIMIZATION_LEVEL = s;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_SWIFT_FLAGS = "-DXcode";
