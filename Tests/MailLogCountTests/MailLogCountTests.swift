@@ -1,6 +1,7 @@
 import XCTest
-@testable import MailLogCount
 
+/*
+@testable import MailLogCount
 class MailLogCountTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
@@ -14,3 +15,5 @@ class MailLogCountTests: XCTestCase {
         ("testExample", testExample),
     ]
 }
+
+ */
