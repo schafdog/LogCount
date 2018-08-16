@@ -8,9 +8,9 @@
 import Foundation
 
 class DateConversion {
-    
-    private let interval_str = [9 : ":00", 10: ":0", 11 : "0", 12 : ""]
-    var interval_dict = [ 9 : 3600.0, 11 : 600.0, 12 : 60.0]
+
+    private let interval_str = [6: "", 9 : ":00", 10: ":0", 11 : "0", 12 : ""]
+    var interval_dict = [ 6: 24*3600.0, 9 : 3600.0, 11 : 600.0, 12 : 60.0]
     private var df : DateFormatter;
     public var len : Int
     

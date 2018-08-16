@@ -6,43 +6,25 @@ import Darwin
 #endif
 import Utility
 
-// Use enums to enforce uniqueness of option labels.
-enum LongLabel: String {
-    case FileType           = "filetype"
-    case PresetName         = "preset"
-    case DeleteExistingFile = "replace"
-    case LogEverything      = "verbose"
-    case TrimStartTime      = "trim-start-time"
-    case TrimEndTime        = "trim-end-time"
-    case FilterMetadata     = "filter-metadata"
-    case InjectMetadata     = "inject-metadata"
-}
-
-enum ShortLabel: String {
-    case FileType           = "f"
-    case PresetName         = "p"
-    case DeleteExistingFile = "r"
-    case LogEverything      = "v"
-}
-
 var arguments = CommandLine.arguments;
 let commandName = arguments.remove(at: 0);
-print("Arguments: \(arguments.count) ");
 
 enum TimePeriod: String {
     case Day
     case Hour
     case TenMin
+    case TenMinute
     case Minute
 }
 
-var timeToLength = [ TimePeriod.Day: 6, TimePeriod.Hour: 9, TimePeriod.TenMin : 11, TimePeriod.Minute: 12]
+var timeToLength = [ TimePeriod.Day: 6, TimePeriod.Hour: 9, TimePeriod.TenMin : 11, TimePeriod.TenMinute : 11, TimePeriod.Minute: 12]
 
 extension TimePeriod: StringEnumArgument {
     static var completion: ShellCompletion {
         return .values([(TimePeriod.Day.rawValue,  ""),
                         (TimePeriod.Hour.rawValue, ""),
                         (TimePeriod.TenMin.rawValue,""),
+                        (TimePeriod.TenMinute.rawValue,""),
                         (TimePeriod.Minute.rawValue,  ""),
                         ])
     }
@@ -67,7 +49,6 @@ var fileHandle = FileHandle.standardInput
 do {
     let args = try parser.parse(arguments)
     if let paramTimePeriod = args.get(timePeriod) {
-        print("paramTimePeriod: \(paramTimePeriod)")
         defaultTimePeriod = paramTimePeriod
     }
 
@@ -104,20 +85,8 @@ do {
     exit(1)
 }
 
-var counter = 0
-func updateCounter() {
-    counter += 1;
-    print("tick tack");
-}
-
-var SwiftTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { arg in 
-    print("tick tock");
-}
-
 func executeCommand(command: String, args: [String]) -> String {
-
     let task = Process();
-
     task.launchPath = command
     task.arguments = args
 
@@ -127,10 +96,10 @@ func executeCommand(command: String, args: [String]) -> String {
 
     let data = pipe.fileHandleForReading.readDataToEndOfFile()
     let output: String = String(data: data, encoding: String.Encoding.utf8)!
-
     return output
 }
 
+var counter = 0
 var total_count = 0;
 var count = 0
 var match_time = ""
@@ -139,9 +108,7 @@ guard let len = timeToLength[defaultTimePeriod] else {
     exit(1)
 }
 
-print("Len: \(len)")
-
-func getDateFormatter(_ len: Int) -> DateFormatter {
+func getDateFormatter() -> DateFormatter {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "MMM dd HH:mm:ss"
     return dateFormatter;
@@ -163,7 +130,7 @@ for pat in patternArray {
     let regex = try! NSRegularExpression(pattern: pat, options: []);
     regexArray.append(regex)
 }
-var dateConv = DateConversion(df: getDateFormatter(len), len: len)
+var dateConv = DateConversion(df: getDateFormatter(), len: len)
 var sr = StreamReader(fileHandle: fileHandle)
 var old_time : DateGroup?
 while let line = sr.nextLine() {
