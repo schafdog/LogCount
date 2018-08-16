@@ -81,9 +81,9 @@ do {
             print("Failed to open \(filename). Error: \(error.localizedDescription) Exiting")
             exit(1)
         }
-        if let _ = args.get(statArg) {
-            lineStat = ProcentLineStat();
-        }
+    }
+    if let _ = args.get(statArg) {
+        lineStat = PercentLineStat();
     }
 } catch ArgumentParserError.expectedArguments(_, let args) {
     print("Missing arguments \(args)")
