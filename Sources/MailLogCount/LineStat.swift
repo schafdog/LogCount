@@ -50,10 +50,11 @@ class LineStat : CustomStringConvertible {
     }
 }
 
-class ProcentLineStat : LineStat {
+class PercentLineStat : LineStat {
     
     override func printStat(_ string : String) {
-        print("" + String((100*matched/total)) + "%\t" + string)
+        let percent = total != 0 ? String((100*matched/total)) + "%"  : "-"
+        print(percent + "\t" + string)
     }
 
 }
