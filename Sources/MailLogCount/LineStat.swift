@@ -20,8 +20,7 @@ class LineStat : CustomStringConvertible {
     }
 
     init() {
-        total = 0
-        matched = 0
+        reset()
     }
 
     func reset() {
@@ -46,15 +45,29 @@ class LineStat : CustomStringConvertible {
     }
 
     public func printStat(_ string : String) {
-        print(description + "\t" + string)
+        print(description + "[\(getPercent())]\t" + string)
     }
+
+    public func in_range(_ range :ClosedRange<Int>) -> Bool {
+        return range.contains(getMatched())
+    }
+
+    func getPercent() -> Int {
+        return total > 0 ? 100*matched/total : -1
+    }
+
 }
 
 class PercentLineStat : LineStat {
     
     override func printStat(_ string : String) {
-        let percent = total != 0 ? String((100*matched/total)) + "%"  : "-"
-        print(percent + "\t" + string)
+        let percentNum = getPercent()
+        let percentStr = percentNum != -1 ? String(percentNum) + "%"  : "N/A"
+        print(percentStr + " \(matched)/\(total)\t" + string)
+    }
+    
+    override public func in_range(_ range :ClosedRange<Int>) -> Bool {
+        return range.contains(getPercent())
     }
 
 }
