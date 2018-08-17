@@ -96,11 +96,12 @@ func executeCommand(command: String, args: [String]) -> String? {
     let task = Process();
     task.launchPath = command
     task.arguments = args
-    let env = [ "REPLYTO" : "MailLogCount <postmaster@schafroth.dk>"]
+    let procInfo = ProcessInfo()
+    var env = procInfo.environment;
+    env["REPLYTO"] = "MailLogCount <postmaster@schafroth.dk>"
     task.environment = env;
     let resultPipe = Pipe()
     let inputPipe = Pipe()
-
     task.standardInput = inputPipe
     task.standardOutput = resultPipe
     let mailBody = inputPipe.fileHandleForWriting
